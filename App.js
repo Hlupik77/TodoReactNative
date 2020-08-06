@@ -1,45 +1,29 @@
-import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Button, Header, Input, ListItem} from "react-native-elements";
+import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import HomeScreen from "./src/screen/HomeScreen";
+import TodoScreen from "./src/screen/TodoScreen";
+import {Router} from "./src/utils/Router";
 
+const Stack = createStackNavigator();
 
-export default function App() {
-    const [item, changeItem] = useState('')
-    const [list, changeList] = useState([])
-
-    const onPress = () => {
-        const newList = [...list, item]
-        changeList(newList)
-        changeItem('')
-    }
-
+function App() {
     return (
-        <View style={styles.container}>
-            <Header centerComponent={{text: 'Заметки', style: styles.header}}/>
-            <View style={styles.search}>
-                <Input value={item} onChangeText={changeItem} containerStyle={{flex: 0.8}} placeholder='Add new task'/>
-                <Button onPress={onPress} containerStyle={{flex: 0.2}} title="ADD"/>
-            </View>
-            {
-                list.map((item, i) => (
-                    <ListItem
-                        key={i}
-                        title={item}
-                        bottomDividet
-                        chevron
-                    />
-                ))
-            }
-        </View>
+        <NavigationContainer>
+            <Stack.Navigator screenOptions={{
+                headerStyle: {
+                    backgroundColor: '#03A9F4',
+                },
+                headerTitleStyle: {
+                    color: 'white'
+                },
+            }}
+            >
+                <Stack.Screen name={Router.home} component={HomeScreen}/>
+                <Stack.Screen name={Router.todo} component={TodoScreen}/>
+            </Stack.Navigator>
+        </NavigationContainer>
     );
 }
 
-const styles = StyleSheet.create({
-    header: {
-        color: '#fff'
-    },
-    search: {
-        display: 'flex',
-        flexDirection: 'row'
-    }
-});
+export default App;
