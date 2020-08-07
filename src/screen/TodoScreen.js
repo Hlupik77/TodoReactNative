@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const TodoScreen = ({route}) => {
     const defaultData = {
+        id: Date.now(),
         title: '',
         description: ''
     }

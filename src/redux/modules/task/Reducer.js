@@ -15,7 +15,7 @@ export function tasks(state = initialState, action) {
         case UPDATE_TASK:
             return {
                 ...state,
-                data: [...state.data.filter(el => el.title !== payload.title), payload]
+                data: [...state.data.filter(el => el.id !== payload.id), payload]
             }
         case REMOVE_TASK:
             return {
