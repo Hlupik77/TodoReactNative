@@ -20,7 +20,7 @@ export function tasks(state = initialState, action) {
         case REMOVE_TASK:
             return {
                 ...state,
-                data: state.data.filter(el => el.title !== payload)
+                data: state.data.filter(el => el.id !== payload)
             }
         default:
             return state;

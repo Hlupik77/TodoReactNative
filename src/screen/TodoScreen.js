@@ -2,7 +2,7 @@ import React, {useLayoutEffect, useState} from 'react';
 import {View, TextInput, Button, Alert} from "react-native";
 import {useDispatch} from "react-redux";
 import {TASK_ACTIONS} from "../redux/modules/task/Action";
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const TodoScreen = ({route}) => {
     const defaultData = {
@@ -10,7 +10,7 @@ const TodoScreen = ({route}) => {
         title: '',
         description: ''
     }
-    const { currentTask } = route.params;
+    const {currentTask} = route.params;
     const taskData = currentTask || defaultData
     const taskAction = currentTask ? 'Update' : 'Create'
 
@@ -39,6 +39,11 @@ const TodoScreen = ({route}) => {
         } else {
             dispatch(TASK_ACTIONS.createTask(task))
         }
+        navigation.goBack()
+    }
+
+    const removeTask = () => {
+        dispatch(TASK_ACTIONS.removeTask(currentTask.id))
         navigation.goBack()
     }
 
@@ -75,6 +80,12 @@ const TodoScreen = ({route}) => {
             <View style={{margin: 16}}>
                 <Button title={taskAction} onPress={saveTask}/>
             </View>
+            {
+                currentTask ?
+                    <View style={{margin: 16}}>
+                        <Button color={'red'} title={'Remove'} onPress={removeTask}/>
+                    </View> : <></>
+            }
         </View>
     );
 };
