@@ -2,31 +2,35 @@ import React, {useLayoutEffect, useState} from 'react';
 import {StyleSheet, View} from "react-native";
 import {Icon, Input, ListItem} from "react-native-elements";
 import {Router} from "../utils/Router";
+import {useSelector} from "react-redux";
+import { useNavigation } from '@react-navigation/native';
 
-const HomeScreen = ({ navigation }) => {
-    const [item, changeItem] = useState('')
-    const [list, changeList] = useState([])
+const HomeScreen = () => {
+    const navigation = useNavigation()
+    const [textForSearching, searchByText] = useState('')
+    const tasks = useSelector(state => state.tasks.data)
+    const filteredData = tasks.filter(el => !el.title.search(textForSearching))
+
+    const taskList = (filteredData.length > 0) ? filteredData : tasks
 
     useLayoutEffect(() => {
         navigation.setOptions({
             title: 'Задачи',
             headerRight: (props) => <Icon
-                onPress={() => navigation.navigate(Router.todo)}
+                onPress={() => navigation.navigate(Router.todo, {currentTask: null})}
                 color={'#fff'}
                 name='add' />
         });
     }, [navigation]);
 
-    const onPress = () => {
-        const newList = [...list, item]
-        changeList(newList)
-        changeItem('')
+    const onPressTask = task => {
+        navigation.navigate(Router.todo, {currentTask: task});
     }
 
     return (
         <View style={styles.container}>
             <View style={styles.search}>
-                <Input value={item} onChangeText={changeItem} placeholder='Add new task'
+                <Input value={textForSearching} onChangeText={searchByText} placeholder='Add new task'
                        leftIcon={
                            <Icon
                                name='search'
@@ -36,14 +40,18 @@ const HomeScreen = ({ navigation }) => {
                 />
             </View>
             {
-                list.map((item, i) => (
-                    <ListItem
-                        key={i}
-                        title={item}
-                        bottomDividet
-                        chevron
-                    />
-                ))
+                taskList.map((task, i) => {
+                    return (
+                        <ListItem
+                            key={i}
+                            title={task.title}
+                            subtitle={task.description}
+                            bottomDividet
+                            chevron
+                            onPress={() => onPressTask(task)}
+                        />
+                    )
+                })
             }
         </View>
     );
