@@ -1,5 +1,5 @@
 import React, {useLayoutEffect, useState} from 'react';
-import {StyleSheet, View} from "react-native";
+import {StyleSheet, View, Text} from "react-native";
 import {Icon, Input, ListItem} from "react-native-elements";
 import {Router} from "../utils/Router";
 import {useSelector} from "react-redux";
@@ -10,8 +10,6 @@ const HomeScreen = () => {
     const [textForSearching, searchByText] = useState('')
     const tasks = useSelector(state => state.tasks.data)
     const filteredData = tasks.filter(el => !el.title.search(textForSearching))
-
-    const taskList = (filteredData.length > 0) ? filteredData : tasks
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -40,7 +38,7 @@ const HomeScreen = () => {
                 />
             </View>
             {
-                taskList.map((task, i) => {
+                filteredData.length ? filteredData.map((task, i) => {
                     return (
                         <ListItem
                             key={i}
@@ -51,7 +49,16 @@ const HomeScreen = () => {
                             onPress={() => onPressTask(task)}
                         />
                     )
-                })
+                }) : 
+                <Text style={{ 
+                    width: '100%',
+                    textAlign: 'center',
+                    padding: 24,
+                    fontSize: 32,
+                    color: 'rgba(0,0,0,.32)'
+                }}>
+                    task list not found
+                </Text>
             }
         </View>
     );
