@@ -8,7 +8,7 @@ import rootReducer from './store/root-reducer';
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  whitelist: [],
+  whitelist: ['tasks'],
   blacklist: [],
 };
 
